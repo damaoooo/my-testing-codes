@@ -1,0 +1,206 @@
+#include <iostream>
+using namespace std;
+class Course
+{
+	public:
+		int  CourseId;
+		string courseName;
+		int credit;
+		Course(int CourseId1, string courseName1, int credit1)
+		{
+			CourseId=CourseId1;
+			courseName=courseName1;
+			credit=credit1;
+			cout<<"you have set a course:"<<endl;
+			cout<<"ID: "<<CourseId<<"\t"<<"name: "<<courseName<<"\t"<<"credit: "<<credit<<endl; 
+		}
+};
+class Person
+{
+	public:
+		string name;
+		int age;
+		Person(string name1, int age1)
+		{
+		age=age1;
+		name=name1;
+		}	
+};
+class Teacher: public Person
+{
+	public:
+	int teacherId;
+	int *TeachCourse;
+	int courseNum;
+	Teacher(string name1, int age1, int teacherId1, int n):Person(name1,age1)
+	{
+	courseNum=0;
+	teacherId=teacherId1;
+	TeachCourse = new int[n];
+	}
+	void teach()
+	{cout <<"i am a teacher, i teach my student"<<endl;}
+	void setCourseId(Course course)
+	{
+		TeachCourse[courseNum++]=course.CourseId;
+	}
+};
+class Student:public Person
+{
+	public:
+		int courseCount;
+		int number;
+		int myCourses[100];
+		int n;
+		Student(string name1, int age1, int number1, int n1):Person(name1,age1)
+		{
+			courseCount=0;
+			number=number1;
+			n=n1;
+			cout<<"welcome "<<name<<"\t your age is: "<<age<<"\t your number is "<<number<<endl;
+		}
+		void selectCourse( Course course)
+		{
+			for(int cnt=0;cnt<courseCount;cnt++)
+			{
+				if(myCourses[cnt]==course.CourseId)
+				{
+					cout<<"you have selected that!"<<endl;
+					return;
+				}
+			}
+			myCourses[courseCount++]=course.CourseId; 
+			cout<<name<<" you succeed selecting : "<<endl;
+			cout<<"ID: "<<course.CourseId<<"\t"<<"name: "<<course.courseName<<"\t"<<"credit: "<<course.credit<<endl; 
+		}
+		void deleteCourse(Course course)
+		{
+			int temp=-1;
+			 for(int cnt=0;cnt<courseCount;cnt++)
+			 {
+			 	if(myCourses[cnt]==course.CourseId)
+			 	{
+			 		temp=cnt;
+			 		cout<<name<<"  you delected :"<<endl;
+			 		cout<<"ID: "<<course.CourseId<<"\t"<<"name: "<<course.courseName<<"\t"<<"credit: "<<course.credit<<endl; 
+			 		break;
+				}
+			 }
+			 if(temp==-1)
+			 {
+			 	cout<<"you haven't select that!"<<endl;
+			 	return;
+			 }
+			 myCourses[temp]=0;
+			 myCourses[temp]=myCourses[courseCount-1];
+			 courseCount--;
+		}
+		void showCourse()
+		{
+			cout<<"CourseCount is "<<courseCount<<endl;
+			cout<<"CourseSelect is ";
+			for(int cnt=0;cnt<courseCount;cnt++)
+			{
+				cout<<myCourses[cnt]<<"\t";
+			}
+			cout<<endl;
+		}
+		bool judge()
+		{
+			if(courseCount>5) return true;
+			return false;
+		}
+		void judgeResult()
+		{
+			if(judge()==1)
+			{
+				cout<<"enough!"<<endl;
+			}
+			else
+			{
+				cout<<"not enough!"<<endl;
+			}
+		}
+};
+class TeachingAssistant:public Student
+{
+	public:
+		int assCourses[100];
+		int assCourseCount;
+		TeachingAssistant(string name1, int age1, int number1, int n1):Student(name1,age1,number1,n1)
+		{
+			assCourseCount=0;
+		}
+		void teach()
+		{cout <<"i am a teaching assistant, i help my teacher teach his students"<<endl;}
+		void selectCourse(Teacher t)
+		{
+			for(int cnt=0;cnt<assCourseCount;cnt++)
+			{
+				if(assCourses[cnt]==t.teacherId)
+				{
+					cout<<"you have selected this teacher!"<<endl;
+					return;
+				}
+			}
+			assCourses[assCourseCount++]=t.teacherId;
+			cout<<"assistant "<<name<<" succeed selecting teacher:"<<endl;
+			cout<<"ID:"<<t.teacherId<<" name:"<<t.name<<endl;
+		}
+		void deleteCourse(Teacher t)
+		{
+			int temp=-1;
+			for(int cnt=0;cnt<assCourseCount;cnt++)
+			{
+				if(assCourses[cnt]==t.teacherId)
+				{
+					temp=cnt;
+					cout<<"assistant "<<name<<" succeed delecting teacher:"<<endl;
+					cout<<"ID:"<<t.teacherId<<" name:"<<t.name<<endl;
+					break;
+				}
+			}
+			if(temp==-1)
+			{
+				cout<<"you haven't select that teacher!"<<endl;
+				return;
+			}
+			assCourses[temp]=assCourses[assCourseCount-1];
+			assCourseCount--;
+		}
+		void showassistant()
+		{
+			cout<<"the CourseNum I assistant is "<<assCourseCount<<endl;
+			cout<<"Teacher I Select is ";
+			for(int cnt=0;cnt<assCourseCount;cnt++)
+			{
+				cout<<assCourses[cnt]<<"\t";
+			}
+			cout<<endl;
+		}
+		
+};
+int main()
+{
+	Course course1(100,"weijifen",5);
+	Course course2(101,"xiandai",4);
+	Student student1("ggn",18,201806,5);
+	student1.selectCourse(course1);
+	student1.selectCourse(course2);
+	student1.showCourse();
+	student1.deleteCourse(course1);
+	student1.showCourse();
+	student1.judgeResult();
+	Teacher teacher1("yushiwei",38,1000,1);
+	teacher1.setCourseId(course1);
+	Teacher teacher2("liufuti",40,1001,1);
+	teacher2.setCourseId(course2);
+	TeachingAssistant assistant1("liyanwei",18,201706,5);
+	assistant1.selectCourse(teacher1);
+	assistant1.selectCourse(teacher2);
+	assistant1.showassistant();
+	assistant1.deleteCourse(teacher1);
+	assistant1.showassistant();
+	return 0;
+ }
+
