@@ -53,8 +53,8 @@ def rewrite(textpath,text):
     f.close()
 
 def main():
-    rootpath = 'C:/Users/周半仙/Desktop/temp/'
-    textpath = rootpath+'abc.md'
+    rootpath = 'your_markdown_filepath'
+    textpath = rootpath+'your_markdown_filename'
     text = parseText(textpath)
     src,picdst = getPicPath(text)
     cmp = getPicUrl(rootpath,picdst)
